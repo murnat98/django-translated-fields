@@ -10,7 +10,6 @@ from django.utils.functional import lazy
 from django.utils.text import capfirst
 from django.utils.translation import get_language
 
-
 __all__ = [
     "show_language_code",
     "TranslatedField",
@@ -33,8 +32,9 @@ def show_language_code(show):
 
 def _verbose_name_maybe_language_code(verbose_name, language_code):
     def verbose_name_fn():
-        if _show_language_code.get(False):
-            return "%s [%s]" % (capfirst(verbose_name), language_code)
+        if _show_language_code.get(True):
+            language = {code: lang for code, lang in settings.LANGUAGES}[language_code]
+            return "%s [%s]" % (capfirst(verbose_name), language)
         return str(verbose_name)
 
     return lazy(verbose_name_fn, str)()
